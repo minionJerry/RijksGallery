@@ -24,7 +24,7 @@ class GetArtObjectUseCaseTest {
     fun testProcess() = runTest {
         val objectNumber = "SK-C-5"
         val image = HeaderImage("29a2a516-f1d2-4713-9cbd-7a4458026057",0,0,1920,460,"https://lh3.googleusercontent.com/O7ES8hCeygPDvHSob5Yl4bPIRGA58EoCM-ouQYN6CYBw5jlELVqk2tLkHF5C45JJj-5QBqF6cA6zUfS66PUhQamHAw=s0")
-        val artObject1 = ArtObject("nl-SK-C-5","SK-C-5","De Nachtwacht1",image)
+        val artObject1 = ArtObject("nl-SK-C-5","SK-C-5","De Nachtwacht1","Rembrandt van Rijn", image)
 
         whenever(artObjectRepository.getArtObject(objectNumber)).thenReturn(flowOf(artObject1))
 

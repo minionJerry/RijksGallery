@@ -1,4 +1,4 @@
-package com.minionjerry.android.rijksgallery.domain
+package com.minionjerry.android.rijksgallery.domain.usecase
 
 import com.minionjerry.android.rijksgallery.domain.entity.ArtObject
 import com.minionjerry.android.rijksgallery.domain.entity.HeaderImage

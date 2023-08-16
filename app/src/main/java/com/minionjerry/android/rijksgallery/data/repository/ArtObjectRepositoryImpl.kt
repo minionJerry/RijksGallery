@@ -15,14 +15,14 @@ class ArtObjectRepositoryImpl @Inject constructor(
     override fun getArtObjects(): Flow<List<ArtObject>> {
         return remoteArtObjectDataSource.getArtObjects()
             .onEach {
-                localArtObjectDataSource.saveArtObjects(it)
+                localArtObjectDataSource.addArtObjects(it)
             }
     }
 
     override fun getArtObject(objectNumber: String): Flow<ArtObject> {
         return remoteArtObjectDataSource.getArtObject(objectNumber)
             .onEach {
-                localArtObjectDataSource.saveArtObjects(listOf(it))
+                localArtObjectDataSource.addArtObjects(listOf(it))
             }
     }
 }

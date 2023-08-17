@@ -16,15 +16,15 @@ class RemoteArtObjectDataSourceImpl @Inject constructor(
     private val artObjectService: ArtObjectService
 ) : RemoteArtObjectDataSource {
     override fun getArtObjects(): Flow<List<ArtObject>> {
-       return flow {
-           emit(artObjectService.getArtObjects())
-       }.map { list->
-           list.map {artObjectApiModel ->
+        return flow {
+            emit(artObjectService.getArtObjects())
+        }.map { list ->
+            list.map { artObjectApiModel ->
                 convert(artObjectApiModel)
-           }
-       }. catch {
-           throw UseCaseException.ArtObjectException(it)
-       }
+            }
+        }.catch {
+            throw UseCaseException.ArtObjectException(it)
+        }
     }
 
     override fun getArtObject(objectNumber: String): Flow<ArtObject> {

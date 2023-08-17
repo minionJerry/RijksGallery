@@ -1,4 +1,4 @@
-package com.minionjerry.android.rijksgallery.data.injection
+package com.minionjerry.android.rijksgallery.data.repository.injection
 
 import com.minionjerry.android.rijksgallery.data.repository.ArtObjectRepositoryImpl
 import com.minionjerry.android.rijksgallery.domain.repository.ArtObjectRepository

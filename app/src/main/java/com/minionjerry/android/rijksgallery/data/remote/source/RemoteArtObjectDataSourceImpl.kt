@@ -2,7 +2,6 @@ package com.minionjerry.android.rijksgallery.data.remote.source
 
 import com.minionjerry.android.rijksgallery.data.remote.networking.ArtObjectApiModel
 import com.minionjerry.android.rijksgallery.data.remote.networking.ArtObjectService
-import com.minionjerry.android.rijksgallery.data.repository.source.local.LocalArtObjectDataSource
 import com.minionjerry.android.rijksgallery.data.repository.source.remote.RemoteArtObjectDataSource
 import com.minionjerry.android.rijksgallery.domain.entity.ArtObject
 import com.minionjerry.android.rijksgallery.domain.entity.HeaderImage

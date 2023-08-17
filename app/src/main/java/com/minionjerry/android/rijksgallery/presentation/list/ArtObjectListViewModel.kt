@@ -17,8 +17,7 @@ class ArtObjectListViewModel @Inject constructor(
     private val converter: ArtObjectListConverter
 ) : ViewModel() {
 
-    private val _groupedArtObjectListFlow =
-        MutableStateFlow<UiState<GroupedArtObjectListModel>>(UiState.Loading)
+    private val _groupedArtObjectListFlow = MutableStateFlow<UiState<GroupedArtObjectListModel>>(UiState.Loading())
     val groupedArtObjectListFlow: StateFlow<UiState<GroupedArtObjectListModel>> =
         _groupedArtObjectListFlow
 

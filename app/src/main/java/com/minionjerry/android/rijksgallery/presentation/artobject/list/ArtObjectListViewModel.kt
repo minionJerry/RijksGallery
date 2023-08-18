@@ -1,8 +1,9 @@
-package com.minionjerry.android.rijksgallery.presentation.list
+package com.minionjerry.android.rijksgallery.presentation.artobject.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.minionjerry.android.rijksgallery.domain.usecase.GetArtObjectsGroupedByArtistUseCase
+import com.minionjerry.android.rijksgallery.presentation.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +17,9 @@ class ArtObjectListViewModel @Inject constructor(
     private val converter: ArtObjectListConverter
 ) : ViewModel() {
 
-    private val _groupedArtObjectListFlow = MutableStateFlow<UiState<GroupedArtObjectListModel>>(UiState.Loading())
+    private val _groupedArtObjectListFlow = MutableStateFlow<UiState<GroupedArtObjectListModel>>(
+        UiState.Loading()
+    )
     val groupedArtObjectListFlow: StateFlow<UiState<GroupedArtObjectListModel>> =
         _groupedArtObjectListFlow
 

@@ -10,19 +10,19 @@ import javax.inject.Inject
 
 class ArtObjectRepositoryImpl @Inject constructor(
     private val remoteArtObjectDataSource: RemoteArtObjectDataSource,
-    private val localArtObjectDataSource: LocalArtObjectDataSource
+//    private val localArtObjectDataSource: LocalArtObjectDataSource
     ): ArtObjectRepository {
     override fun getArtObjects(): Flow<List<ArtObject>> {
         return remoteArtObjectDataSource.getArtObjects()
-            .onEach {
-                localArtObjectDataSource.addArtObjects(it)
-            }
+//            .onEach {
+//                localArtObjectDataSource.addArtObjects(it)
+//            }
     }
 
     override fun getArtObject(objectNumber: String): Flow<ArtObject> {
         return remoteArtObjectDataSource.getArtObject(objectNumber)
-            .onEach {
-                localArtObjectDataSource.addArtObjects(listOf(it))
-            }
+//            .onEach {
+//                localArtObjectDataSource.addArtObjects(listOf(it))
+//            }
     }
 }

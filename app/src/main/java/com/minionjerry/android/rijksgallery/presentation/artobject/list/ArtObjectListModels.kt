@@ -1,6 +1,4 @@
-package com.minionjerry.android.rijksgallery.presentation.list
-
-import com.minionjerry.android.rijksgallery.domain.entity.HeaderImage
+package com.minionjerry.android.rijksgallery.presentation.artobject.list
 
 data class ArtObjectListItemModel(
     val id: String,

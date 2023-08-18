@@ -1,10 +1,12 @@
-package com.minionjerry.android.rijksgallery.presentation.list
+package com.minionjerry.android.rijksgallery.presentation.artobject.list
 
 import com.minionjerry.android.rijksgallery.domain.entity.ArtObject
 import com.minionjerry.android.rijksgallery.domain.entity.Result
 import com.minionjerry.android.rijksgallery.domain.usecase.GetArtObjectsGroupedByArtistUseCase
+import com.minionjerry.android.rijksgallery.presentation.UiState
+import javax.inject.Inject
 
-class ArtObjectListConverter {
+class ArtObjectListConverter @Inject constructor(){
 
     fun convert(groupedArtObjectListResult: Result<GetArtObjectsGroupedByArtistUseCase.Response>): UiState<GroupedArtObjectListModel> {
         return when (groupedArtObjectListResult) {

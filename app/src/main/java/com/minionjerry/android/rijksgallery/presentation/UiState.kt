@@ -1,4 +1,4 @@
-package com.minionjerry.android.rijksgallery.presentation.list
+package com.minionjerry.android.rijksgallery.presentation
 
 sealed class UiState<T : Any> {
     class Loading<T: Any> : UiState<T>()

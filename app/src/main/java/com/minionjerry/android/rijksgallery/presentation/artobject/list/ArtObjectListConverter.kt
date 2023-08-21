@@ -33,8 +33,8 @@ class ArtObjectListConverter @Inject constructor(){
                 objectNumber,
                 title,
                 artist,
-                with(headerImage) {
-                    HeaderImageModel(
+                with(artImage) {
+                    ArtImageModel(
                         this.guid,
                         this.offsetX,
                         this.offsetY,

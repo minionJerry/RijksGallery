@@ -39,10 +39,10 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun App(navController: NavHostController){
+fun App(navController: NavHostController) {
     NavHost(navController = navController, startDestination = "/groupedArtObjects") {
-        composable(route = "/groupedArtObjects"){
-           ArtObjectListScreen(viewModel = hiltViewModel())
+        composable(route = "/groupedArtObjects") {
+            ArtObjectListScreen(viewModel = hiltViewModel())
         }
     }
 }
@@ -60,5 +60,15 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 fun GreetingPreview() {
     RijksGalleryTheme {
         Greeting("Android")
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AppPreview() {
+    RijksGalleryTheme {
+        val navController = rememberNavController()
+        App(navController = navController)
+
     }
 }

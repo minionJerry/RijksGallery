@@ -22,7 +22,10 @@ class NetworkModule {
      fun apiKeyAsQuery(chain: Interceptor.Chain) = chain.proceed(
         chain.request()
             .newBuilder()
-            .url(chain.request().url.newBuilder().addQueryParameter("key", BuildConfig.API_KEY).build())
+            .url(chain.request().url.newBuilder()
+                .addQueryParameter("p","0")
+                .addQueryParameter("ps","20")
+                .addQueryParameter("key", BuildConfig.API_KEY).build())
             .build()
     )
 

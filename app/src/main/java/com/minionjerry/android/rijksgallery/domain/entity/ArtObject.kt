@@ -5,10 +5,10 @@ data class ArtObject(
     val objectNumber: String,
     val title: String,
     val artist: String,
-    val headerImage: HeaderImage
+    val artImage: ArtImage
 )
 
-data class HeaderImage(
+data class ArtImage(
     val guid: String,
     val offsetX: Int,
     val offsetY: Int,

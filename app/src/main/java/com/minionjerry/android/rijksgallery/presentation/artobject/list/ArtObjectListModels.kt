@@ -1,14 +1,23 @@
 package com.minionjerry.android.rijksgallery.presentation.artobject.list
 
+data class GroupedArtObjectListModel(
+    val list: List<ArtObjectListModel> = listOf()
+)
+
+data class ArtObjectListModel(
+    val headerText: String = "",
+    val items: List<ArtObjectListItemModel> = listOf()
+)
+
 data class ArtObjectListItemModel(
     val id: String,
     val objectNumber: String,
     val title: String,
     val artist: String,
-    val headerImage: HeaderImageModel
+    val image: ArtImageModel
 )
 
-data class HeaderImageModel(
+data class ArtImageModel(
     val guid: String,
     val offsetX: Int,
     val offsetY: Int,
@@ -17,11 +26,3 @@ data class HeaderImageModel(
     val url: String
 )
 
-data class ArtObjectListModel(
-    val headerText: String = "",
-    val items: List<ArtObjectListItemModel> = listOf()
-)
-
-data class GroupedArtObjectListModel(
-    val list: List<ArtObjectListModel> = listOf()
-)

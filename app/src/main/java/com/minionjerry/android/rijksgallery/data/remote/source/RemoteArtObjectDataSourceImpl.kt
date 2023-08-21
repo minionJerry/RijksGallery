@@ -4,7 +4,7 @@ import com.minionjerry.android.rijksgallery.data.remote.networking.ArtObjectApiM
 import com.minionjerry.android.rijksgallery.data.remote.networking.ArtObjectService
 import com.minionjerry.android.rijksgallery.data.repository.source.remote.RemoteArtObjectDataSource
 import com.minionjerry.android.rijksgallery.domain.entity.ArtObject
-import com.minionjerry.android.rijksgallery.domain.entity.HeaderImage
+import com.minionjerry.android.rijksgallery.domain.entity.ArtImage
 import com.minionjerry.android.rijksgallery.domain.entity.UseCaseException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -45,7 +45,7 @@ class RemoteArtObjectDataSourceImpl @Inject constructor(
             artObjectApiModel.title,
             artObjectApiModel.artist,
             with(artObjectApiModel.headerImage) {
-                HeaderImage(
+                ArtImage(
                     this.guid,
                     this.offsetX,
                     this.offsetY,

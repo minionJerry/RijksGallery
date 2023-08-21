@@ -4,9 +4,9 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface ArtObjectService {
-    @GET("/collection")
-    suspend fun getArtObjects(): List<ArtObjectApiModel>
+    @GET("en/collection")
+    suspend fun getArtObjects(): CollectionResponse
 
-    @GET("/collection/{objectNumber}")
+    @GET("en/collection/{objectNumber}")
     suspend fun getArtObject(@Path("object-number") objectNumber: String): ArtObjectApiModel
 }

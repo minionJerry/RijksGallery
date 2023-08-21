@@ -1,19 +1,30 @@
 package com.minionjerry.android.rijksgallery.data.remote.injection
 
+import com.minionjerry.android.rijksgallery.BuildConfig
 import com.minionjerry.android.rijksgallery.data.remote.networking.ArtObjectService
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 
+const val BASE_URL = "https://www.rijksmuseum.nl/api/"
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
+
+    @Provides
+     fun apiKeyAsQuery(chain: Interceptor.Chain) = chain.proceed(
+        chain.request()
+            .newBuilder()
+            .url(chain.request().url.newBuilder().addQueryParameter("key", BuildConfig.API_KEY).build())
+            .build()
+    )
 
     @Provides
     fun provideOkHttpClient(): OkHttpClient =
@@ -21,6 +32,7 @@ class NetworkModule {
             .Builder()
             .readTimeout(15, TimeUnit.SECONDS)
             .connectTimeout(15, TimeUnit.SECONDS)
+            .addInterceptor {apiKeyAsQuery(chain = it) }
             .build()
 
     @Provides
@@ -34,7 +46,7 @@ class NetworkModule {
     fun provideRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
         Retrofit
             .Builder()
-            .baseUrl("https://www.rijksmuseum.nl/api/en")
+            .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()

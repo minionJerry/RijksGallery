@@ -18,7 +18,8 @@ class RemoteArtObjectDataSourceImpl @Inject constructor(
     override fun getArtObjects(): Flow<List<ArtObject>> {
         return flow {
             emit(artObjectService.getArtObjects())
-        }.map { list ->
+        }.map {
+            val list = it.artObjects
             list.map { artObjectApiModel ->
                 convert(artObjectApiModel)
             }

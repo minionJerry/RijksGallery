@@ -25,6 +25,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -33,7 +34,6 @@ import coil.size.Scale
 import coil.size.Size
 import com.minionjerry.android.rijksgallery.presentation.UiState
 import kotlin.random.Random
-import kotlin.random.asJavaRandom
 
 @Composable
 fun ArtObjectListScreen(viewModel: ArtObjectListViewModel) {
@@ -50,13 +50,15 @@ fun ArtObjectListScreen(viewModel: ArtObjectListViewModel) {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun GroupedArtObjectList(groupedArtObjects: GroupedArtObjectListModel) {
-//    ArtObjectListWithHeader(groupedArtObjects = groupedArtObjects)
-    ArtObjectList(groupedArtObjects = groupedArtObjects)
+    //  Use the composable function below to see the grid with distinct sections with headers, which is a bit ugly
+    //  ArtObjectListWithHeader(groupedArtObjects = groupedArtObjects)
+
+    // Use the composable function below to see the grid of art objects in a nicer way
+     ArtObjectList(groupedArtObjects = groupedArtObjects)
 }
 
 
 const val IMAGE_SCALE_DOWN = 2
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ArtObjectList(groupedArtObjects: GroupedArtObjectListModel) {
@@ -67,13 +69,16 @@ fun ArtObjectList(groupedArtObjects: GroupedArtObjectListModel) {
         content = {
             groupedArtObjects.list.map { artObjectList ->
                 val random = Random
-                val randomColor = Color(random.nextFloat(),random.nextFloat(), random.nextFloat())
+                val randomColor = Color(random.nextFloat(), random.nextFloat(), random.nextFloat())
 
                 item(artObjectList.headerText) {
-                    ArtistHeader(artist = artObjectList.headerText, color = randomColor)
+                    ArtistHeader(
+                        artist = artObjectList.headerText,
+                        color = randomColor
+                    )
                 }
-                items(artObjectList.items) { artObj ->
 
+                items(artObjectList.items) { artObj ->
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
                             .data(artObj.image.url)
@@ -90,8 +95,7 @@ fun ArtObjectList(groupedArtObjects: GroupedArtObjectListModel) {
                             .background(color = randomColor)
                             .fillMaxWidth()
                             .wrapContentHeight(),
-                        alpha = 0.8f
-
+                        alpha = 0.8f,
                     )
                 }
             }
@@ -110,7 +114,7 @@ fun ArtObjectListWithHeader(groupedArtObjects: GroupedArtObjectListModel) {
     ) {
         groupedArtObjects.list.map { artObjectListModel ->
             header {
-                ArtistHeader(artObjectListModel.headerText)
+                ArtistHeader(artObjectListModel.headerText, color = Color.Black)
             }
 
             items(artObjectListModel.items) { artObj ->
@@ -148,7 +152,7 @@ fun ArtistHeader(artist: String, color: Color = Color.Transparent) {
             .background(color)
             .padding(16.dp)
     ) {
-        Text(text = "$artist's art(s):")
+        Text(text = "$artist's art(s):", color = Color(color.toArgb().getContrastColor()))
     }
 }
 

@@ -20,35 +20,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import coil.size.Scale
 import coil.size.Size
-import kotlin.random.Random
+import com.minionjerry.android.rijksgallery.R
 
 @Composable
 fun ArtObjectListScreen(viewModel: ArtObjectListViewModel) {
     viewModel.loadArtObjects()
     val artObjects = viewModel.artObjectListFlow.collectAsLazyPagingItems()
     ArtObjectList(artObjects = artObjects)
-    artObjects.let { state ->
-        when {
-            state.loadState.refresh is LoadState.Loading -> Loading()
-            state.loadState.refresh is LoadState.Error -> {
-                val error = artObjects.loadState.refresh as LoadState.Error
-                Error(error.error.localizedMessage!!)
-            }
-
-            state.loadState.append is LoadState.Loading -> Loading()
-            state.loadState.append is LoadState.Error -> {
-                val error = artObjects.loadState.append as LoadState.Error
-                Error(error.error.localizedMessage!!)
-            }
-        }
-    }
 }
 
 
@@ -56,27 +40,20 @@ const val IMAGE_SCALE_DOWN = 2
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ArtObjectList(artObjects: LazyPagingItems<ArtObjectListItemModel>) {
+fun ArtObjectList(artObjects: LazyPagingItems<ArtObjectUiModel>) {
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Adaptive(150.dp),
         verticalItemSpacing = 4.dp,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
         content = {
-            val groupedArtObjects = artObjects.itemSnapshotList.items.groupBy { it.artist }
-            groupedArtObjects.map { artObjectList ->
-                val random = Random
-                val randomColor = Color(random.nextFloat(), random.nextFloat(), random.nextFloat())
-
-                item(artObjectList.key) {
-                    ArtistHeader(
-                        artist = artObjectList.key,
-                        color = randomColor
-                    )
+            items(artObjects.itemCount) { index ->
+                val data = artObjects[index]!!
+                when (data) {
+                    is ArtObjectListItemModel -> ArtObject(artObj = data)
+                    is HeaderItemModel ->
+                        ArtistHeader(artist = data.artist, color = Color.Black)
                 }
 
-                items(artObjectList.value.size) { index ->
-                    ArtObject(artObj = artObjectList.value[index], bgColor = randomColor )
-                }
             }
         },
         modifier = Modifier.fillMaxSize()
@@ -84,10 +61,11 @@ fun ArtObjectList(artObjects: LazyPagingItems<ArtObjectListItemModel>) {
 }
 
 @Composable
-fun ArtObject(artObj: ArtObjectListItemModel, bgColor: Color) {
+fun ArtObject(artObj: ArtObjectListItemModel, bgColor: Color = Color.Transparent) {
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(artObj.image.url)
+            .placeholder(R.drawable.placeholder_view)
             .size(
                 Size(
                     artObj.image.width / IMAGE_SCALE_DOWN,
@@ -101,7 +79,7 @@ fun ArtObject(artObj: ArtObjectListItemModel, bgColor: Color) {
             .background(color = bgColor)
             .fillMaxWidth()
             .wrapContentHeight(),
-        alpha = 0.8f,
+        alpha = 0.7f,
     )
 }
 

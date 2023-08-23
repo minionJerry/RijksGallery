@@ -2,7 +2,7 @@ package com.minionjerry.android.rijksgallery.data.remote.injection
 
 import com.minionjerry.android.rijksgallery.BuildConfig
 import com.minionjerry.android.rijksgallery.data.remote.networking.ArtObjectService
-import com.minionjerry.android.rijksgallery.data.repository.source.paging.MAX_PAGE_SIZE
+import com.minionjerry.android.rijksgallery.data.repository.source.paging.PAGE_SIZE
 import com.squareup.moshi.Moshi
 import dagger.Module
 import dagger.Provides
@@ -24,7 +24,8 @@ class NetworkModule {
         chain.request()
             .newBuilder()
             .url(chain.request().url.newBuilder()
-                .addQueryParameter("ps",MAX_PAGE_SIZE.toString())
+                .addQueryParameter("imgonly","True")
+                .addQueryParameter("s","artistdesc")
                 .addQueryParameter("key", BuildConfig.API_KEY).build())
             .build()
     )

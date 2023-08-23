@@ -6,7 +6,7 @@ import retrofit2.http.Query
 
 interface ArtObjectService {
     @GET("en/collection")
-    suspend fun getArtObjects(@Query("p") pageNumber: Int): CollectionResponse
+    suspend fun getArtObjects(@Query("p") pageNumber: Int, @Query("ps") pageSize: Int): CollectionResponse
 
     @GET("en/collection/{objectNumber}")
     suspend fun getArtObject(@Path("object-number") objectNumber: String): ArtObjectApiModel

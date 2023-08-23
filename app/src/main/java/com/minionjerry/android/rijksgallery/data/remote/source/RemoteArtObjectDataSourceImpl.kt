@@ -16,8 +16,8 @@ class RemoteArtObjectDataSourceImpl @Inject constructor(
     private val artObjectService: ArtObjectService
 ) : RemoteArtObjectDataSource {
 
-    override suspend fun getArtObjects(pageNumber: Int): List<ArtObject> {
-        val networkArtObject = artObjectService.getArtObjects(pageNumber).artObjects
+    override suspend fun getArtObjects(pageNumber: Int, pageSize: Int): List<ArtObject> {
+        val networkArtObject = artObjectService.getArtObjects(pageNumber, pageSize).artObjects
         return networkArtObject.map(::convert)
     }
 

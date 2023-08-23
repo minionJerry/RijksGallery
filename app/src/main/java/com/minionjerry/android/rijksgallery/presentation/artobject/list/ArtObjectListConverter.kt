@@ -1,6 +1,7 @@
 package com.minionjerry.android.rijksgallery.presentation.artobject.list
 
 import androidx.paging.PagingData
+import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.minionjerry.android.rijksgallery.domain.entity.ArtObject
 import com.minionjerry.android.rijksgallery.domain.entity.Result
@@ -9,10 +10,18 @@ import javax.inject.Inject
 
 class ArtObjectListConverter @Inject constructor() {
 
-    fun convert(groupedArtObjectListResult: Result<GetArtObjectsUseCase.Response>): PagingData<ArtObjectListItemModel> {
+    fun convert(groupedArtObjectListResult: Result<GetArtObjectsUseCase.Response>): PagingData<ArtObjectUiModel> {
         return when (groupedArtObjectListResult) {
             is Result.Success -> {
                 groupedArtObjectListResult.data.artObjects.map(::convert)
+                    .insertSeparators { artObjectListItemModel: ArtObjectListItemModel?, artObjectListItemModel2: ArtObjectListItemModel? ->
+                        if (artObjectListItemModel2 != null && artObjectListItemModel?.artist != artObjectListItemModel2.artist) {
+                            HeaderItemModel(artObjectListItemModel2.artist)
+                        } else {
+                            // no separator - either end of list, or artists are the same
+                            null
+                        }
+                    }
             }
 
             is Result.Error -> {

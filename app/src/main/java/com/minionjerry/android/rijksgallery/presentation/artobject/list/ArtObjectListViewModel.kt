@@ -17,10 +17,10 @@ class ArtObjectListViewModel @Inject constructor(
     private val converter: ArtObjectListConverter
 ) : ViewModel() {
 
-    private val _artObjectListFlow = MutableStateFlow<PagingData<ArtObjectListItemModel>>(
+    private val _artObjectListFlow = MutableStateFlow<PagingData<ArtObjectUiModel>>(
         PagingData.empty()
     )
-    val artObjectListFlow: StateFlow<PagingData<ArtObjectListItemModel>> =
+    val artObjectListFlow: StateFlow<PagingData<ArtObjectUiModel>> =
         _artObjectListFlow
 
     fun loadArtObjects() {

@@ -4,6 +4,6 @@ import com.minionjerry.android.rijksgallery.domain.entity.ArtObject
 import kotlinx.coroutines.flow.Flow
 
 interface RemoteArtObjectDataSource {
-    fun getArtObjects(): Flow<List<ArtObject>>
+    suspend fun getArtObjects(pageNumber: Int): List<ArtObject>
     fun getArtObject(objectNumber: String): Flow<ArtObject>
 }

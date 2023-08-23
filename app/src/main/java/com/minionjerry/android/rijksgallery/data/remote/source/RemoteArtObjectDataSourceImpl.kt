@@ -15,18 +15,12 @@ import javax.inject.Inject
 class RemoteArtObjectDataSourceImpl @Inject constructor(
     private val artObjectService: ArtObjectService
 ) : RemoteArtObjectDataSource {
-    override fun getArtObjects(): Flow<List<ArtObject>> {
-        return flow {
-            emit(artObjectService.getArtObjects())
-        }.map {
-            val list = it.artObjects
-            list.map { artObjectApiModel ->
-                convert(artObjectApiModel)
-            }
-        }.catch {
-            throw UseCaseException.ArtObjectException(it)
-        }
+
+    override suspend fun getArtObjects(pageNumber: Int): List<ArtObject> {
+        val networkArtObject = artObjectService.getArtObjects(pageNumber).artObjects
+        return networkArtObject.map(::convert)
     }
+
 
     override fun getArtObject(objectNumber: String): Flow<ArtObject> {
         return flow {

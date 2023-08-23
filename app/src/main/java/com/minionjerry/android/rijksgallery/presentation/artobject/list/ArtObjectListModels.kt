@@ -1,14 +1,5 @@
 package com.minionjerry.android.rijksgallery.presentation.artobject.list
 
-data class GroupedArtObjectListModel(
-    val list: List<ArtObjectListModel> = listOf()
-)
-
-data class ArtObjectListModel(
-    val headerText: String = "",
-    val items: List<ArtObjectListItemModel> = listOf()
-)
-
 data class ArtObjectListItemModel(
     val id: String,
     val objectNumber: String,

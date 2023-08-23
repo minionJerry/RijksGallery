@@ -1,5 +1,6 @@
 package com.minionjerry.android.rijksgallery.domain.usecase
 
+import androidx.paging.PagingData
 import com.minionjerry.android.rijksgallery.domain.entity.ArtObject
 import com.minionjerry.android.rijksgallery.domain.repository.ArtObjectRepository
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +19,6 @@ class GetArtObjectsUseCase @Inject constructor(
     }
     object Request: UseCase.Request
 
-    data class Response(val artObjects: List<ArtObject>): UseCase.Response
+    data class Response(val artObjects: PagingData<ArtObject>): UseCase.Response
 
 }

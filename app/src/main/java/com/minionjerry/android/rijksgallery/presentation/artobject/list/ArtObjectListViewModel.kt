@@ -2,8 +2,8 @@ package com.minionjerry.android.rijksgallery.presentation.artobject.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.minionjerry.android.rijksgallery.domain.usecase.GetArtObjectsGroupedByArtistUseCase
-import com.minionjerry.android.rijksgallery.presentation.UiState
+import androidx.paging.PagingData
+import com.minionjerry.android.rijksgallery.domain.usecase.GetArtObjectsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,24 +13,24 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ArtObjectListViewModel @Inject constructor(
-    private val useCase: GetArtObjectsGroupedByArtistUseCase,
+    private val useCase: GetArtObjectsUseCase,
     private val converter: ArtObjectListConverter
 ) : ViewModel() {
 
-    private val _groupedArtObjectListFlow = MutableStateFlow<UiState<GroupedArtObjectListModel>>(
-        UiState.Loading()
+    private val _artObjectListFlow = MutableStateFlow<PagingData<ArtObjectListItemModel>>(
+        PagingData.empty()
     )
-    val groupedArtObjectListFlow: StateFlow<UiState<GroupedArtObjectListModel>> =
-        _groupedArtObjectListFlow
+    val artObjectListFlow: StateFlow<PagingData<ArtObjectListItemModel>> =
+        _artObjectListFlow
 
-    fun loadGroupedArtObjects() {
+    fun loadArtObjects() {
         viewModelScope.launch {
-            useCase.execute(GetArtObjectsGroupedByArtistUseCase.Request)
+            useCase.execute(GetArtObjectsUseCase.Request)
                 .map {
                     converter.convert(it)
                 }
-                .collect{
-                    _groupedArtObjectListFlow.value = it
+                .collect {
+                    _artObjectListFlow.value = it
                 }
         }
     }

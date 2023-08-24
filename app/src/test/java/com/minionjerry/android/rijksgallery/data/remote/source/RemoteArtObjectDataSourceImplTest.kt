@@ -1,11 +1,13 @@
 package com.minionjerry.android.rijksgallery.data.remote.source
 
+import com.minionjerry.android.rijksgallery.data.remote.networking.ArtImageApiModel
 import com.minionjerry.android.rijksgallery.data.remote.networking.ArtObjectApiModel
 import com.minionjerry.android.rijksgallery.data.remote.networking.ArtObjectService
-import com.minionjerry.android.rijksgallery.data.remote.networking.ArtImageApiModel
 import com.minionjerry.android.rijksgallery.data.remote.networking.CollectionResponse
-import com.minionjerry.android.rijksgallery.domain.entity.ArtObject
+import com.minionjerry.android.rijksgallery.data.remote.networking.DetailResponse
+import com.minionjerry.android.rijksgallery.data.repository.source.paging.PAGE_SIZE
 import com.minionjerry.android.rijksgallery.domain.entity.ArtImage
+import com.minionjerry.android.rijksgallery.domain.entity.ArtObject
 import com.minionjerry.android.rijksgallery.domain.entity.UseCaseException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
@@ -16,13 +18,13 @@ import org.junit.Assert.*
 import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
-import java.lang.RuntimeException
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class RemoteArtObjectDataSourceImplTest {
 
     private val artObjectService = mock<ArtObjectService>()
     private val remoteArtObjectDataSourceImpl = RemoteArtObjectDataSourceImpl(artObjectService)
+    private val page = 1
+    private val pageSize = PAGE_SIZE
 
     @Test
     fun testGetArtObjects() = runTest {
@@ -55,18 +57,10 @@ class RemoteArtObjectDataSourceImplTest {
         val remoteArtObjects = listOf(remoteArtObjectApiModel)
         val collectionResponse = CollectionResponse(remoteArtObjects)
 
-        whenever(artObjectService.getArtObjects()).thenReturn(collectionResponse)
+        whenever(artObjectService.getArtObjects(page, pageSize)).thenReturn(collectionResponse)
 
-        val result = remoteArtObjectDataSourceImpl.getArtObjects().first()
+        val result = remoteArtObjectDataSourceImpl.getArtObjects(page, pageSize)
         assertEquals(expectedArtObjects, result)
-    }
-
-    @Test
-    fun testGetUsersThrowsError() = runTest {
-        whenever(artObjectService.getArtObjects()).thenThrow(RuntimeException())
-        remoteArtObjectDataSourceImpl.getArtObjects().catch {
-            assertTrue(it is UseCaseException.ArtObjectException)
-        }.collect()
     }
 
     @Test
@@ -97,7 +91,10 @@ class RemoteArtObjectDataSourceImplTest {
             "Rembrandt van Rijn",
             remoteArtImageApiModel
         )
-        whenever(artObjectService.getArtObject(objectNumber)).thenReturn(remoteArtObjectApiModel)
+
+        val response = DetailResponse(remoteArtObjectApiModel)
+
+        whenever(artObjectService.getArtObject(objectNumber)).thenReturn(response)
 
         val result = remoteArtObjectDataSourceImpl.getArtObject(objectNumber).first()
         assertEquals(expectedArtObject, result)

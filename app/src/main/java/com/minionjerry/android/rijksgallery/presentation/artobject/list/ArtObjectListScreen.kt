@@ -2,6 +2,7 @@ package com.minionjerry.android.rijksgallery.presentation.artobject.list
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +11,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
@@ -20,6 +25,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
@@ -27,20 +33,21 @@ import coil.request.ImageRequest
 import coil.size.Scale
 import coil.size.Size
 import com.minionjerry.android.rijksgallery.R
+import com.minionjerry.android.rijksgallery.presentation.navigation.NavRoutes
 
 @Composable
-fun ArtObjectListScreen(viewModel: ArtObjectListViewModel) {
+fun ArtObjectListScreen(viewModel: ArtObjectListViewModel, navController: NavController) {
     viewModel.loadArtObjects()
     val artObjects = viewModel.artObjectListFlow.collectAsLazyPagingItems()
-    ArtObjectList(artObjects = artObjects)
+    ArtObjectList(artObjects = artObjects) {
+        navController.navigate(NavRoutes.ArtObject.routeForArtObject(it))
+    }
 }
 
 
-const val IMAGE_SCALE_DOWN = 2
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ArtObjectList(artObjects: LazyPagingItems<ArtObjectUiModel>) {
+fun ArtObjectList(artObjects: LazyPagingItems<ArtObjectUiModel>, onGridClick: (String) -> Unit) {
     LazyVerticalStaggeredGrid(
         columns = StaggeredGridCells.Adaptive(150.dp),
         verticalItemSpacing = 4.dp,
@@ -49,7 +56,7 @@ fun ArtObjectList(artObjects: LazyPagingItems<ArtObjectUiModel>) {
             items(artObjects.itemCount) { index ->
                 val data = artObjects[index]!!
                 when (data) {
-                    is ArtObjectListItemModel -> ArtObject(artObj = data)
+                    is ArtObjectListItemModel -> ArtObject(artObj = data, onCardClick = onGridClick)
                     is HeaderItemModel ->
                         ArtistHeader(artist = data.artist, color = Color.Black)
                 }
@@ -60,27 +67,42 @@ fun ArtObjectList(artObjects: LazyPagingItems<ArtObjectUiModel>) {
     )
 }
 
+const val IMAGE_SCALE_DOWN = 2
 @Composable
-fun ArtObject(artObj: ArtObjectListItemModel, bgColor: Color = Color.Transparent) {
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(artObj.image.url)
-            .placeholder(R.drawable.placeholder_view)
-            .size(
-                Size(
-                    artObj.image.width / IMAGE_SCALE_DOWN,
-                    artObj.image.height / IMAGE_SCALE_DOWN
-                )
-            )
-            .scale(Scale.FIT)
-            .build(),
-        contentDescription = artObj.title,
+fun ArtObject(
+    artObj: ArtObjectListItemModel,
+    bgColor: Color = Color.Transparent,
+    onCardClick: (String) -> Unit
+) {
+    Card(
         modifier = Modifier
-            .background(color = bgColor)
+            .padding(horizontal = 8.dp, vertical = 8.dp)
             .fillMaxWidth()
-            .wrapContentHeight(),
-        alpha = 0.7f,
-    )
+            .clickable { onCardClick(artObj.objectNumber) },
+        elevation = CardDefaults.cardElevation(2.dp),
+        shape = RoundedCornerShape(corner = CornerSize(16.dp))
+    ) {
+
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(artObj.image.url)
+                .placeholder(R.drawable.placeholder_view)
+                .size(
+                    Size(
+                        artObj.image.width / IMAGE_SCALE_DOWN,
+                        artObj.image.height / IMAGE_SCALE_DOWN
+                    )
+                )
+                .scale(Scale.FIT)
+                .build(),
+            contentDescription = artObj.title,
+            modifier = Modifier
+                .background(color = bgColor)
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            alpha = 0.7f,
+        )
+    }
 }
 
 

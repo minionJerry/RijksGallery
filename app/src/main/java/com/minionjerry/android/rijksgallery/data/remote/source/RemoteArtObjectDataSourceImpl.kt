@@ -24,7 +24,7 @@ class RemoteArtObjectDataSourceImpl @Inject constructor(
 
     override fun getArtObject(objectNumber: String): Flow<ArtObject> {
         return flow {
-            emit(artObjectService.getArtObject(objectNumber))
+            emit(artObjectService.getArtObject(objectNumber).artObject)
         }.map {
             convert(it)
         }.catch {

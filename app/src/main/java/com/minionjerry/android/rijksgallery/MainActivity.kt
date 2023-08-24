@@ -15,7 +15,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.minionjerry.android.rijksgallery.presentation.artobject.detail.ArtObjectDetailScreen
 import com.minionjerry.android.rijksgallery.presentation.artobject.list.ArtObjectListScreen
+import com.minionjerry.android.rijksgallery.presentation.navigation.NavRoutes
 import com.minionjerry.android.rijksgallery.ui.theme.RijksGalleryTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -40,9 +42,12 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun App(navController: NavHostController) {
-    NavHost(navController = navController, startDestination = "/groupedArtObjects") {
-        composable(route = "/groupedArtObjects") {
-            ArtObjectListScreen(viewModel = hiltViewModel())
+    NavHost(navController = navController, startDestination = NavRoutes.ArtObjects.route) {
+        composable(route = NavRoutes.ArtObjects.route) {
+            ArtObjectListScreen(viewModel = hiltViewModel(), navController)
+        }
+        composable(route = NavRoutes.ArtObject.route, arguments = NavRoutes.ArtObject.arguments) {
+            ArtObjectDetailScreen(viewModel = hiltViewModel(), objectNumber = NavRoutes.ArtObject.fromEntry(it))
         }
     }
 }

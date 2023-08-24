@@ -9,5 +9,5 @@ interface ArtObjectService {
     suspend fun getArtObjects(@Query("p") pageNumber: Int, @Query("ps") pageSize: Int): CollectionResponse
 
     @GET("en/collection/{objectNumber}")
-    suspend fun getArtObject(@Path("object-number") objectNumber: String): ArtObjectApiModel
+    suspend fun getArtObject(@Path("objectNumber") objectNumber: String): DetailResponse
 }

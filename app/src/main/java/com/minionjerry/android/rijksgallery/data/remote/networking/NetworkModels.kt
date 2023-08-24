@@ -6,6 +6,10 @@ data class CollectionResponse(
     @Json(name = "artObjects") val artObjects: List<ArtObjectApiModel>
 )
 
+data class DetailResponse(
+    @Json(name = "artObject") val artObject: ArtObjectApiModel
+)
+
 data class ArtObjectApiModel(
     @Json(name = "id") val id: String,
     @Json(name = "objectNumber") val objectNumber: String,

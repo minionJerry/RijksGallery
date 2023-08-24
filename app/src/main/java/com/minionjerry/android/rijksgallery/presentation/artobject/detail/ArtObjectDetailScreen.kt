@@ -1,33 +1,31 @@
 package com.minionjerry.android.rijksgallery.presentation.artobject.detail
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Snackbar
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
-import coil.size.Scale
-import coil.size.Size
-import com.minionjerry.android.rijksgallery.R
+import androidx.compose.ui.unit.sp
 import com.minionjerry.android.rijksgallery.presentation.UiState
+import com.minionjerry.android.rijksgallery.presentation.artobject.list.ArtObjectImage
 import com.minionjerry.android.rijksgallery.presentation.artobject.list.ArtObjectListItemModel
-import com.minionjerry.android.rijksgallery.presentation.artobject.list.IMAGE_SCALE_DOWN
-import com.minionjerry.android.rijksgallery.presentation.artobject.list.getContrastColor
 
 @Composable
 fun ArtObjectDetailScreen(viewModel: ArtObjectDetailViewModel, objectNumber: String) {
@@ -39,46 +37,68 @@ fun ArtObjectDetailScreen(viewModel: ArtObjectDetailViewModel, objectNumber: Str
             is UiState.Success -> ArtObjectDetail(artObject = state.data)
         }
     }
-
 }
 
 @Composable
 fun ArtObjectDetail(artObject: ArtObjectListItemModel) {
-    Text(text = "DetailsScreen", color = MaterialTheme.colorScheme.onBackground)
+    val scrollState = rememberScrollState()
+    Column(modifier = Modifier.fillMaxSize()) {
+        BoxWithConstraints {
+            Surface {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .verticalScroll(scrollState),
+                ) {
+                    ArtObjectImage(artObj = artObject, onCardClick = {})
+                    ArtObjectDetails(artObject = artObject,this@BoxWithConstraints.maxHeight)
+                }
+            }
+        }
+    }
 }
 
 @Composable
-fun ArtObject(artObj: ArtObjectListItemModel, bgColor: Color = Color.Transparent) {
-    AsyncImage(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data(artObj.image.url)
-            .placeholder(R.drawable.placeholder_view)
-            .size(
-                Size(
-                    artObj.image.width / IMAGE_SCALE_DOWN,
-                    artObj.image.height / IMAGE_SCALE_DOWN
-                )
-            )
-            .scale(Scale.FIT)
-            .build(),
-        contentDescription = artObj.title,
-        modifier = Modifier
-            .background(color = bgColor)
-            .fillMaxWidth()
-            .wrapContentHeight(),
-        alpha = 0.7f,
-    )
+private fun ArtObjectDetails(artObject: ArtObjectListItemModel, containerHeight: Dp) {
+    Column {
+        Title(artObject.title)
+        ArtObjectProperty("Artist", artObject.artist)
+        ArtObjectProperty("Id",artObject.id)
+    }
 }
 
 
 @Composable
-fun ArtistHeader(artist: String, color: Color = Color.Transparent) {
-    Column(
-        modifier = Modifier
-            .background(color)
-            .padding(16.dp)
-    ) {
-        Text(text = "$artist's art(s):", color = Color(color.toArgb().getContrastColor()))
+private fun Title(
+    title: String
+) {
+    Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp, top = 16.dp)) {
+        Text(
+            text = title,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold,
+            fontFamily = FontFamily.Monospace
+        )
+    }
+}
+
+@Composable
+fun ArtObjectProperty(label: String, value: String) {
+    Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
+        Divider(modifier = Modifier.padding(bottom = 4.dp))
+        Text(
+            text = label,
+            modifier = Modifier.height(24.dp),
+            style = MaterialTheme.typography.bodyLarge,
+            fontFamily = FontFamily.Serif
+        )
+        Text(
+            text = value,
+            modifier = Modifier.height(24.dp),
+            style = MaterialTheme.typography.bodyLarge,
+            fontWeight = FontWeight.Bold,
+            fontFamily = FontFamily.Monospace
+        )
     }
 }
 

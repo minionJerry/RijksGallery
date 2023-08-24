@@ -11,10 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Text
@@ -44,7 +40,6 @@ fun ArtObjectListScreen(viewModel: ArtObjectListViewModel, navController: NavCon
     }
 }
 
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ArtObjectList(artObjects: LazyPagingItems<ArtObjectUiModel>, onGridClick: (String) -> Unit) {
@@ -56,7 +51,7 @@ fun ArtObjectList(artObjects: LazyPagingItems<ArtObjectUiModel>, onGridClick: (S
             items(artObjects.itemCount) { index ->
                 val data = artObjects[index]!!
                 when (data) {
-                    is ArtObjectListItemModel -> ArtObject(artObj = data, onCardClick = onGridClick)
+                    is ArtObjectListItemModel -> ArtObjectImage(artObj = data, onCardClick = onGridClick)
                     is HeaderItemModel ->
                         ArtistHeader(artist = data.artist, color = Color.Black)
                 }
@@ -68,41 +63,33 @@ fun ArtObjectList(artObjects: LazyPagingItems<ArtObjectUiModel>, onGridClick: (S
 }
 
 const val IMAGE_SCALE_DOWN = 2
+
 @Composable
-fun ArtObject(
+fun ArtObjectImage(
     artObj: ArtObjectListItemModel,
     bgColor: Color = Color.Transparent,
     onCardClick: (String) -> Unit
 ) {
-    Card(
-        modifier = Modifier
-            .padding(horizontal = 8.dp, vertical = 8.dp)
-            .fillMaxWidth()
-            .clickable { onCardClick(artObj.objectNumber) },
-        elevation = CardDefaults.cardElevation(2.dp),
-        shape = RoundedCornerShape(corner = CornerSize(16.dp))
-    ) {
-
-        AsyncImage(
-            model = ImageRequest.Builder(LocalContext.current)
-                .data(artObj.image.url)
-                .placeholder(R.drawable.placeholder_view)
-                .size(
-                    Size(
-                        artObj.image.width / IMAGE_SCALE_DOWN,
-                        artObj.image.height / IMAGE_SCALE_DOWN
-                    )
+    AsyncImage(
+        model = ImageRequest.Builder(LocalContext.current)
+            .data(artObj.image.url)
+            .placeholder(R.drawable.placeholder_view)
+            .size(
+                Size(
+                    artObj.image.width / IMAGE_SCALE_DOWN,
+                    artObj.image.height / IMAGE_SCALE_DOWN
                 )
-                .scale(Scale.FIT)
-                .build(),
-            contentDescription = artObj.title,
-            modifier = Modifier
-                .background(color = bgColor)
-                .fillMaxWidth()
-                .wrapContentHeight(),
-            alpha = 0.7f,
-        )
-    }
+            )
+            .scale(Scale.FIT)
+            .build(),
+        contentDescription = artObj.title,
+        modifier = Modifier
+            .background(color = bgColor)
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .clickable { onCardClick(artObj.objectNumber) },
+        alpha = 1f,
+    )
 }
 
 

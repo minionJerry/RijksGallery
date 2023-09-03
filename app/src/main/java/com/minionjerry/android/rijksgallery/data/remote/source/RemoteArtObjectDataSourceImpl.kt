@@ -2,9 +2,11 @@ package com.minionjerry.android.rijksgallery.data.remote.source
 
 import com.minionjerry.android.rijksgallery.data.remote.networking.ArtObjectApiModel
 import com.minionjerry.android.rijksgallery.data.remote.networking.ArtObjectService
+import com.minionjerry.android.rijksgallery.data.remote.networking.CollectionResponse
 import com.minionjerry.android.rijksgallery.data.repository.source.remote.RemoteArtObjectDataSource
 import com.minionjerry.android.rijksgallery.domain.entity.ArtObject
 import com.minionjerry.android.rijksgallery.domain.entity.ArtImage
+import com.minionjerry.android.rijksgallery.domain.entity.ArtObjectsResponse
 import com.minionjerry.android.rijksgallery.domain.entity.UseCaseException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -16,10 +18,11 @@ class RemoteArtObjectDataSourceImpl @Inject constructor(
     private val artObjectService: ArtObjectService
 ) : RemoteArtObjectDataSource {
 
-    override suspend fun getArtObjects(pageNumber: Int, pageSize: Int): List<ArtObject> {
-        val networkArtObject = artObjectService.getArtObjects(pageNumber, pageSize).artObjects
-        return networkArtObject.map(::convert)
+    override suspend fun getArtObjects(pageNumber: Int, pageSize: Int): ArtObjectsResponse {
+        val networkArtObjectsResponse = artObjectService.getArtObjects(pageNumber, pageSize)
+        return convert(networkArtObjectsResponse)
     }
+
 
 
     override fun getArtObject(objectNumber: String): Flow<ArtObject> {
@@ -31,6 +34,9 @@ class RemoteArtObjectDataSourceImpl @Inject constructor(
             throw UseCaseException.ArtObjectException(it)
         }
     }
+
+    private fun convert(collectionResponse: CollectionResponse): ArtObjectsResponse =
+        ArtObjectsResponse(collectionResponse.artObjects.map { convert(it) }, collectionResponse.count)
 
     private fun convert(artObjectApiModel: ArtObjectApiModel): ArtObject =
         ArtObject(

@@ -3,7 +3,8 @@ package com.minionjerry.android.rijksgallery.data.remote.networking
 import com.squareup.moshi.Json
 
 data class CollectionResponse(
-    @Json(name = "artObjects") val artObjects: List<ArtObjectApiModel>
+    @Json(name = "artObjects") val artObjects: List<ArtObjectApiModel>,
+    @Json(name="count") val count: Int
 )
 
 data class DetailResponse(

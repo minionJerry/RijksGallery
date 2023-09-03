@@ -101,8 +101,6 @@ fun ArtObjectListScreen(viewModel: ArtObjectListViewModel, navController: NavCon
 
         }
     }
-
-
 }
 
 @OptIn(ExperimentalFoundationApi::class)

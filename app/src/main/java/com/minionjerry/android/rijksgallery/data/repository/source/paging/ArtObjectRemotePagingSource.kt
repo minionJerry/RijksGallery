@@ -11,6 +11,7 @@ const val DEFAULT_INIT_KEY = 0
 class ArtObjectPagingSource(
     private val remoteArtObjectDataSource: RemoteArtObjectDataSource
 ) : PagingSource<Int, ArtObject>(){
+
     override fun getRefreshKey(state: PagingState<Int, ArtObject>): Int? {
         return state.anchorPosition
     }
@@ -28,7 +29,6 @@ class ArtObjectPagingSource(
                 prevKey = if (currentPage == DEFAULT_INIT_KEY) null else currentPage - 1,
                 nextKey = if (artObjectsResponse.artObjects.isEmpty()) null else currentPage + 1
             )
-            Log.d("Kany-->","current page is $currentPage \n next page is ${page.nextKey} \n prev page is ${page.prevKey} ")
             page
         } catch (exception: Exception) {
             return LoadResult.Error(exception)

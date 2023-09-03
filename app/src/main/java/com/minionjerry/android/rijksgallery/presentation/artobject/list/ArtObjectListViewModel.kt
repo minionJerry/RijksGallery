@@ -3,6 +3,7 @@ package com.minionjerry.android.rijksgallery.presentation.artobject.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.minionjerry.android.rijksgallery.domain.usecase.GetArtObjectsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +30,7 @@ class ArtObjectListViewModel @Inject constructor(
                 .map {
                     converter.convert(it)
                 }
+                .cachedIn(viewModelScope)
                 .collect {
                     _artObjectListFlow.value = it
                 }
